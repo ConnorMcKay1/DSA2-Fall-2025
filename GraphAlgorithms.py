@@ -3,8 +3,7 @@ print("wowowo")
 # Implement Depth First Search
 
 #does the list need to be tuples?
-
-# Each vertex stored as a mutable dict (instead of an immutable tuple)
+#solved with dictionary
 Graph = {
     "A": {"color": "white", "pi": None, "d": 0, "f": 0, "adj": ["B", "C"]},
     "B": {"color": "white", "pi": None, "d": 0, "f": 0, "adj": ["D"]},
@@ -12,7 +11,7 @@ Graph = {
     "D": {"color": "white", "pi": None, "d": 0, "f": 0, "adj": []}
 }
 
-time = 0
+time = 0    # global time variable for the entire graph
 
 
 def DepthFirstSearch(G):

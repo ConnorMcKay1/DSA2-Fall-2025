@@ -46,34 +46,67 @@ class Graph:
 
 
 
+
+    time = 0    # global time variable for the entire graph
+
     def DFS(self, s):
         ##Implement DFS from the psuedocode given in the slides (s is the source you want to start with. You will need this for SCC)
+        global time
 
+        for u in self:
+            self[u]["color"] = "white"
+            self[u]["pi"] = None
+        time = 0
+
+        for u in self:
+            if self[u]["color"] == "white":
+                self.DFSVisit(u)
 
 
 
     def DFSVisit(self, u):
         ##Implement DFS Visit from the psuedocode given in the slides
+        global time
 
+        time = time + 1
+        self[u]["d"] = time
+        self[u]["color"] = "gray"
+
+        for v in self[u]["adj"]:
+            if self[v]["color"] == "white":
+                self[v]["pi"] = u
+                self.DFSVisit(v)
+
+        self[u]["color"] = "black"
+        time = time + 1
+        self[u]["f"] = time
 
     
     
     def TopologicalSort(self):
         ##Implement Topological Sort from the psuedocode given in the slides
+        LinkedList = []
+        
+        self.DFS()
+
+
 
 
 
 
     def Transpose(self):
         ##Implement a Graph Transopose to be used in the Strongly Connected Components function
-
-
+        pass
 
 
     def SCC(self):
         ##Implement Strongly Connected Components from the psuedocode given in the slides
+        pass
+if __name__ == "__main__":
 
-
-
-
-    if __name__ == "__main__":
+    Graph = {
+        "A": {"color": "white", "pi": None, "d": 0, "f": 0, "adj": ["B", "C"]},
+        "B": {"color": "white", "pi": None, "d": 0, "f": 0, "adj": ["D"]},
+        "C": {"color": "white", "pi": None, "d": 0, "f": 0, "adj": []},
+        "D": {"color": "white", "pi": None, "d": 0, "f": 0, "adj": []}
+    }

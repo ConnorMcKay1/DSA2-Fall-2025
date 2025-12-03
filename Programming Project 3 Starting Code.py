@@ -47,47 +47,49 @@ class Graph:
 
 
 
-    time = 0    # global time variable for the entire graph
+    
 
     def DFS(self, s):
         ##Implement DFS from the psuedocode given in the slides (s is the source you want to start with. You will need this for SCC)
-        global time
+        NumberOfVertices = len(self.aList)
 
-        for u in self:
-            self[u]["color"] = "white"
-            self[u]["pi"] = None
-        time = 0
+        self.color = ["white"] * NumberOfVertices
+        self.pi    = [None]  * NumberOfVertices
+        self.time  = 0
+        self.d     = [0] * NumberOfVertices
+        self.f     = [0] * NumberOfVertices
 
-        for u in self:
-            if self[u]["color"] == "white":
+        for u in range(NumberOfVertices):
+            if self.color[u] == "white":
                 self.DFSVisit(u)
-
 
 
     def DFSVisit(self, u):
         ##Implement DFS Visit from the psuedocode given in the slides
-        global time
 
-        time = time + 1
-        self[u]["d"] = time
-        self[u]["color"] = "gray"
+        self.time += 1
+        self.d[u] = self.time
+        self.color[u] = "gray"
 
-        for v in self[u]["adj"]:
-            if self[v]["color"] == "white":
-                self[v]["pi"] = u
+        for v in self.aList[u]:
+            if self.color[v] == "white":
+                self.pi[v] = u
                 self.DFSVisit(v)
 
-        self[u]["color"] = "black"
-        time = time + 1
-        self[u]["f"] = time
+    
+        self.color[u] = "black"
+        self.time += 1
+        self.f[u] = self.time
 
     
     
     def TopologicalSort(self):
         ##Implement Topological Sort from the psuedocode given in the slides
         LinkedList = []
+
         
-        self.DFS()
+        self.DFS()      ##runs DFS
+        G.f
 
 
 
@@ -102,11 +104,33 @@ class Graph:
     def SCC(self):
         ##Implement Strongly Connected Components from the psuedocode given in the slides
         pass
+
+
+
 if __name__ == "__main__":
 
-    Graph = {
-        "A": {"color": "white", "pi": None, "d": 0, "f": 0, "adj": ["B", "C"]},
-        "B": {"color": "white", "pi": None, "d": 0, "f": 0, "adj": ["D"]},
-        "C": {"color": "white", "pi": None, "d": 0, "f": 0, "adj": []},
-        "D": {"color": "white", "pi": None, "d": 0, "f": 0, "adj": []}
-    }
+    V = [0, 1, 2, 3, 4, 5]
+    E = [(0, 1), (0, 2), (1, 3), (4, 3), (4, 5)]
+
+    G = Graph(V, E, directed=True)
+
+    print("Adjacency List:")
+    G.printGraph()
+
+
+    startingVertex = 0
+    ##print('\n' + "DFS")
+    ##G.DFS(startingVertex)
+
+    print('\n' + "Topolocical Sort")
+    G.TopologicalSort(startingVertex)
+
+
+
+    print(V)
+    print("Discovery times:", G.d)
+    print("Finish times:   ", G.f)
+    print("Parents:         ", G.pi)
+
+    
+    

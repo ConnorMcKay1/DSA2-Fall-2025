@@ -1,3 +1,4 @@
+from ProgrammingProject3Timer import time_method
 import math
 
 # Provided by Dr. Emily Kaplitz
@@ -44,6 +45,13 @@ class Graph:
     def degree(self, v):
         return len(self.aList[v])
 
+    """Returns the degree of specified vertex.
+        v - The vertex you want to get the degree of
+        Return:
+            len(self.aList[v]) - The number of edges coming out of the vertex."""
+    def degree(self, v):
+        return len(self.aList[v])
+
 
 
 
@@ -59,6 +67,9 @@ class Graph:
         self.time = 0
         self.d = [0] * NumberOfVertices
         self.f = [0] * NumberOfVertices
+
+        if self.color[s] == "white":
+            self.DFSVisit(s)
 
         for u in range(NumberOfVertices):
             if self.color[u] == "white":
@@ -93,7 +104,6 @@ class Graph:
                 self.pi[v] = u
                 self.DFSVisit(v)
 
-
         self.color[u] = "black"
         self.time += 1
         self.f[u] = self.time
@@ -102,10 +112,17 @@ class Graph:
     def DFSVisitForSCC(self, u):
         self.color[u] = 'gray'
         self.current_component.append(u)
+
         for v in self.aList[u]:
             if self.color[v] == 'white':
-                self.DFSVisit(v)
+                self.DFSVisitForSCC(v)
+
         self.color[u] = 'black'
+
+
+    def DFS_SCC(self, s):
+        if self.color[s] == "white":
+            self.DFSVisitForSCC(s)
 
     
     
@@ -113,8 +130,7 @@ class Graph:
         ##Implement Topological Sort from the psuedocode given in the slides
         LinkedList = []
 
-        self.DFSforTopoSort()      ##runs DFSforTopoSort which is specifically for use in topo sort
-        G.f
+        self.DFSforTopoSort()
 
         vertices = list(range(len(self.f)))
         vertices.sort(key=lambda v: self.f[v], reverse=True)
@@ -123,7 +139,6 @@ class Graph:
             LinkedList.append(v)
 
         return LinkedList
-
 
 
 
@@ -146,7 +161,8 @@ class Graph:
 
     def SCC(self):
         ##Implement Strongly Connected Components from the psuedocode given in the slides
-        self.DFSforTopoSort()     
+        
+        self.DFSforTopoSort()
 
         GT = self.Transpose()
 
@@ -161,11 +177,11 @@ class Graph:
         GT.d =  [0] * NumberOfVertices
         GT.f = [0] * NumberOfVertices
         GT.time    = 0   
-    
+
         for (finish, u) in order:
             if GT.color[u] == 'white':
                 GT.current_component = []
-                GT.DFS(u)
+                GT.DFS_SCC(u)
                 print(GT.current_component)
 
 
@@ -181,13 +197,13 @@ if __name__ == "__main__":
     G.printGraph()
 
 
-    
-    ##print('\n' + "DFS")
-    #G.DFS(startingVertex)
+    startingVertex = 0
+    print('\n' + "DFS")
+    G.DFS(startingVertex)
 
-    #print('\n' + "Topolocical Sort")
-    #decreasingOrder = G.TopologicalSort()
-    #print(decreasingOrder)
+    print('\n' + "Topolocical Sort")
+    decreasingOrder = G.TopologicalSort()
+    print(decreasingOrder)
 
     print("SCC")
     G.SCC()
@@ -198,5 +214,11 @@ if __name__ == "__main__":
     print("Finish times:   ", G.f)
     print("Parents:         ", G.pi)
 
-    
-    
+
+
+    print()
+    print()
+
+    time_method(G.DFSforTopoSort)
+    time_method(G.TopologicalSort)
+    time_method(G.SCC)
